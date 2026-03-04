@@ -1,5 +1,5 @@
 import { useRef, Suspense } from 'react';
-import { Canvas, useFrame } from '@react-three/fiber';
+import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { useScroll, ScrollControls, useGLTF, Text3D, Center } from '@react-three/drei';
 import * as THREE from 'three';
 
@@ -7,6 +7,10 @@ const ElephantModel = () => {
     const groupRef = useRef<THREE.Group>(null);
     const scroll = useScroll();
     const { scene } = useGLTF('/elephant.glb') as any;
+    const { size } = useThree();
+
+    // Check if device is a phone
+    const isMobile = size.width < 768;
 
     useFrame(() => {
         if (groupRef.current) {
@@ -17,7 +21,11 @@ const ElephantModel = () => {
 
     return (
         <group ref={groupRef}>
-            <primitive object={scene} scale={[5, 5, 5]} position={[0, 0, 0]} />
+            <primitive
+                object={scene}
+                scale={isMobile ? [3, 3, 3] : [5, 5, 5]}
+                position={[0, isMobile ? -0.8 : 0, 0]}
+            />
         </group>
     );
 };
@@ -27,6 +35,9 @@ useGLTF.preload('/elephant.glb');
 const FatElephantText = () => {
     const scroll = useScroll();
     const materialRefs = useRef<(THREE.MeshStandardMaterial | null)[]>([]);
+    const { size } = useThree();
+
+    const isMobile = size.width < 768;
 
     useFrame((_, delta) => {
         const targetOpacity = scroll.offset >= 0.85 ? 1 : 0;
@@ -38,11 +49,11 @@ const FatElephantText = () => {
     });
 
     const text = "FAT ELEPHANT";
-    const radius = 3.2; // How wide the circle is
+    const radius = isMobile ? 1.7 : 3.2; // How wide the circle is
     const maxAngle = Math.PI / 4.5; // How far the text spreads around the top of the circle
 
     return (
-        <group position={[0, -0.2, 0]}>
+        <group position={[0, isMobile ? 0.3 : -0.2, 0]}>
             {text.split('').map((char, index) => {
                 // Determine angle for this specific letter
                 const t = index / (text.length - 1);
@@ -57,12 +68,12 @@ const FatElephantText = () => {
                         <Center>
                             <Text3D
                                 font="/font.json"
-                                size={0.35}
-                                height={0.15}
+                                size={isMobile ? 0.2 : 0.35}
+                                height={isMobile ? 0.08 : 0.15}
                                 curveSegments={32}
                                 bevelEnabled
-                                bevelThickness={0.06}
-                                bevelSize={0.04}
+                                bevelThickness={isMobile ? 0.04 : 0.06}
+                                bevelSize={isMobile ? 0.02 : 0.04}
                                 bevelOffset={0}
                                 bevelSegments={12}
                             >
