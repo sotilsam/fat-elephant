@@ -49,10 +49,6 @@ Open [http://localhost:5173](http://localhost:5173) in your browser to view the 
 
 ## Deployment
 
-This project is fully optimized and ready to be deployed to platforms like [Vercel](https://vercel.com/) or [Netlify](https://netlify.com/).
+This app is currently deployed and live on **Vercel** with real-time Firebase syncing enabled.
 
-To deploy on Vercel:
-
-1. Push your code to your GitHub repository.
-2. Link the repository to a new Vercel project.
-3. Vercel will automatically detect the Vite build settings and deploy the live site.
+*(Optional: Add your live Vercel URL here, e.g.: `https://fat-elephant.vercel.app`)*
