@@ -14,7 +14,9 @@ export const ContentHub = () => {
                         {[
                         { name: 'Spotify', url: 'https://open.spotify.com/artist/7o2yKOsqKliQMe6uVLXHHJ' },
                         { name: 'Apple Music', url: 'https://music.apple.com/il/artist/fat-elephant/1605170615' },
-                        { name: 'Instagram', url: 'https://www.instagram.com/fatellephant?igsh=MTdpa3lhd2FqcTIwMw==' }
+                        { name: 'YouTube', url: 'https://m.youtube.com/@FatElephant' },
+                        { name: 'Instagram', url: 'https://www.instagram.com/fatellephant?igsh=MTdpa3lhd2FqcTIwMw==' },
+                        { name: 'Facebook', url: 'https://www.facebook.com/fatellephant/' }
                     
                     ].map((link) => (
                             <a
