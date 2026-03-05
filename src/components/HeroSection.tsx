@@ -1,11 +1,10 @@
-import { useRef, Suspense, useState } from 'react';
+import { useRef, Suspense, useEffect, useState } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { useScroll, ScrollControls, useGLTF, Scroll } from '@react-three/drei';
+import { useGLTF } from '@react-three/drei';
 import * as THREE from 'three';
 
-const ElephantModel = () => {
+const ElephantModel = ({ scrollProgress }: { scrollProgress: number }) => {
     const groupRef = useRef<THREE.Group>(null);
-    const scroll = useScroll();
     const { scene } = useGLTF('/elephant.glb') as any;
     const { size } = useThree();
 
@@ -14,8 +13,14 @@ const ElephantModel = () => {
 
     useFrame(() => {
         if (groupRef.current) {
-            // Rotate exactly 180 degrees over the entire scroll duration
-            groupRef.current.rotation.y = scroll.offset * Math.PI;
+            // Target rotation is directly tied to scroll progress (0 to 1 -> 0 to PI)
+            const targetRotation = scrollProgress * Math.PI;
+            // Lerp to make it smooth
+            groupRef.current.rotation.y = THREE.MathUtils.lerp(
+                groupRef.current.rotation.y,
+                targetRotation,
+                0.1 // Damping factor for smoothness
+            );
         }
     });
 
@@ -32,47 +37,37 @@ const ElephantModel = () => {
 
 useGLTF.preload('/elephant.glb');
 
-const AnimatedHeadline = () => {
-    const scroll = useScroll();
-    const [opacity, setOpacity] = useState(0);
-
-    useFrame(() => {
-        // perfectly synced with the 3D elephant rotation!
-        if (scroll.offset >= 0.85) {
-            const newOpacity = Math.min((scroll.offset - 0.85) / 0.15, 1);
-            setOpacity(newOpacity);
-        } else {
-            setOpacity(0);
-        }
-    });
-
-    return (
-        <Scroll html>
-            <div
-                className="absolute inset-0 z-10 w-screen h-screen flex flex-col items-center pt-28 md:pt-20 pointer-events-none transition-opacity duration-75"
-                style={{ opacity, transform: 'translate3d(0, 0, 0)' }} // Translate3d helps prevent rendering bugs in <Scroll html>
-            >
-                <h1 className="text-3xl md:text-5xl lg:text-6xl font-black bg-gradient-to-r from-gray-500 via-white to-gray-500 bg-clip-text text-transparent tracking-widest md:tracking-[0.1em] uppercase drop-shadow-[0_0_10px_rgba(255,255,255,0.3)]">
-                    Fat Elephant
-                </h1>
-            </div>
-        </Scroll>
-    );
-};
-
 export const HeroSection = () => {
+    const [scrollProgress, setScrollProgress] = useState(0);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            const rotationScrollDistance = window.innerHeight * 2.5;
+            // Calculate progress from 0 to 1 based on how far we've scrolled
+            let progress = window.scrollY / rotationScrollDistance;
+            // Clamp it between 0 and 1 so it stops rotating exactly at 180 degrees
+            progress = Math.max(0, Math.min(progress, 1));
+
+            setScrollProgress(progress);
+        };
+        handleScroll();
+
+        window.addEventListener('scroll', handleScroll, { passive: true });
+
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
+
     return (
-        <div className="w-full h-[150vh] bg-black relative">
-            <div className="sticky top-0 w-full h-screen">
-                {/* 3D Canvas */}
-                <Canvas camera={{ position: [0, 2, 8], fov: 50 }}>
+        <div className="w-full h-[400vh] bg-black relative">
+            <div className="sticky top-0 w-full h-screen overflow-hidden">
+                <Canvas
+                    camera={{ position: [0, 2, 8], fov: 50 }}
+                    style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 1, pointerEvents: 'none' }}
+                >
                     <ambientLight intensity={0.5} />
                     <directionalLight position={[10, 10, 10]} intensity={1} />
                     <Suspense fallback={null}>
-                        <ScrollControls pages={1.5} damping={0.1}>
-                            <ElephantModel />
-                            <AnimatedHeadline />
-                        </ScrollControls>
+                        <ElephantModel scrollProgress={scrollProgress} />
                     </Suspense>
                 </Canvas>
             </div>
