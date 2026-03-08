@@ -1,6 +1,6 @@
 # Fat Elephant - Official Band Hub 🐘🎸
 
-A real-time, interactive web application built for the band **Fat Elephant**. This project serves as a dynamic promotional website showcasing the band's aesthetic, while doubling as a powerful, collaborative internal hub for band members to coordinate schedules, plan setlists, and brainstorm social media content.
+A real-time, interactive web application built for the band **Fat Elephant**. This project serves as a dynamic promotional website showcasing the band's aesthetic, while doubling as a powerful, collaborative internal hub for band members to coordinate schedules, plan setlists, and brainstorm social media content.!!!!!!
 
 ## Features
 
@@ -51,4 +51,4 @@ Open [http://localhost:5173](http://localhost:5173) in your browser to view the 
 
 This app is currently deployed and live on **Vercel** with real-time Firebase syncing enabled.
 
-*(Optional: Add your live Vercel URL here, e.g.: `https://fat-elephant.vercel.app`)*
+_(Optional: Add your live Vercel URL here, e.g.: `https://fat-elephant.vercel.app`)_
