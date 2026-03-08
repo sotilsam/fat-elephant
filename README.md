@@ -1,6 +1,6 @@
 # Fat Elephant - Official Band Hub 🐘🎸
 
-A real-time, interactive web application built for the band **Fat Elephant**. This project serves as a dynamic promotional website showcasing the band's aesthetic, while doubling as a powerful, collaborative internal hub for band members to coordinate schedules, plan setlists, and brainstorm social media content.!!!!!!
+A real-time, interactive web application built for the band **Fat Elephant**. This project serves as a dynamic promotional website showcasing the band's aesthetic, while doubling as a powerful, collaborative internal hub for band members to coordinate schedules, plan setlists, and brainstorm social media content.
 
 ## Features
 
